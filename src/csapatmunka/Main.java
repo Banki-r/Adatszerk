@@ -11,13 +11,13 @@ public class Main {
     
     public static void main(String[] args) {
         veremSeged = new Stack<>();
-        bemenet = "2+6*(9-5)";
+        bemenet = "(3*(4-5))*(3-5)";
         lengyelForma = lengyelformaAtalakit(bemenet);
-        System.out.println(lengyelForma);
-//        System.out.println(lengyelFormaSzamol(lengyelForma));
+        System.out.println(lengyelFormaSzamol(lengyelForma));
     }
     
     public static String lengyelformaAtalakit(String bemenet) {
+        String valasz = "";
         int i = 0;
         while (i < bemenet.length()) {
             String akt = String.valueOf(bemenet.charAt(i));
@@ -35,36 +35,34 @@ public class Main {
                 case "7":
                 case "8":
                 case "9":
-                    lengyelForma+=akt;
+                    valasz += akt;
                     break;
                 case "*":
                 case "/":
                 case "-":
                 case "+":
-                    if (veremSeged.empty()) {
-                        veremSeged.push(akt);
+                    while (!veremSeged.isEmpty()
+                            && (veremSeged.peek().equals("(") || veremSeged.peek().equals(")") || veremSeged.peek().equals("/") || veremSeged.peek().equals("*") || ((veremSeged.peek().equals("+") || veremSeged.peek().equals("-")) && (akt.equals("+") || akt.equals("-"))))
+                            && !veremSeged.peek().equals("(")) {
+                        valasz += veremSeged.pop();
                     }
-                    else {
-                        while (!veremSeged.empty()) {
-                            if (veremSeged.peek().equals("(") || veremSeged.peek().equals(")") || veremSeged.peek().equals("/") || veremSeged.peek().equals("*") || ((veremSeged.peek().equals("+") || veremSeged.peek().equals("-")) && (akt.equals("+") || akt.equals("-")))) {
-                                lengyelForma+=veremSeged.pop();
-                            }
-                        }
-                        veremSeged.push(akt);
-                    }
+                    veremSeged.push(akt);
                     break;
                 case ")":
-                    while (!veremSeged.peek().equals("(")) {
-                        lengyelForma+=veremSeged.pop();
+                    while (!veremSeged.isEmpty() && !veremSeged.peek().equals("(")) {
+                        valasz += veremSeged.pop();
+                    }
+                    if (!veremSeged.isEmpty() && veremSeged.peek().equals("(")) {
+                        veremSeged.pop();
                     }
                     break;
-            }
-            while (!veremSeged.empty()) {
-                lengyelForma+=veremSeged.pop();
             }
             i++;
         }
-        return lengyelForma;
+        while (!veremSeged.isEmpty()) {
+            valasz += veremSeged.pop();
+        }
+        return valasz;
     }
     
     public static double lengyelFormaSzamol(String lengyelForma){
