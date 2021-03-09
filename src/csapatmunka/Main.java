@@ -10,9 +10,11 @@ public class Main {
     private static String lengyelForma;
     
     public static void main(String[] args) {
-        bemenet = "2695-*+";
+        veremSeged = new Stack<>();
+        bemenet = "2+6*(9-5)";
         lengyelForma = lengyelformaAtalakit(bemenet);
-        System.out.println(lengyelFormaSzamol(lengyelForma));
+        System.out.println(lengyelForma);
+//        System.out.println(lengyelFormaSzamol(lengyelForma));
     }
     
     public static String lengyelformaAtalakit(String bemenet) {
@@ -60,12 +62,12 @@ public class Main {
             while (!veremSeged.empty()) {
                 lengyelForma+=veremSeged.pop();
             }
+            i++;
         }
         return lengyelForma;
     }
     
     public static double lengyelFormaSzamol(String lengyelForma){
-        veremSeged = new Stack<>();
         veremSeged.clear();
             while(!lengyelForma.equals("")){
                 char elem = lengyelForma.charAt(0);
